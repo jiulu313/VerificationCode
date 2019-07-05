@@ -1,17 +1,18 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
-    <HelloWorld/>
+    <sliding-block></sliding-block>
   </div>
 </template>
 
 <script>
 import HelloWorld from './components/HelloWorld'
+import SlidingBlock from './components/SlidingBlock'
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    HelloWorld,
+    SlidingBlock
   }
 }
 </script>
