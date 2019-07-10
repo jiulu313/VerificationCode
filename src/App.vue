@@ -9,14 +9,12 @@
 
 <script>
 import HelloWorld from './components/HelloWorld'
-import SlidingBlock from './components/SlidingBlock'
 import SlidingBlock2 from './components/SlidingBlock2'
 
 export default {
   name: 'App',
   components: {
     HelloWorld,
-    SlidingBlock,
     SlidingBlock2
   }
 }
