@@ -50,16 +50,9 @@
     },
 
     methods: {
-      onCloseClicked() {
-        this.ctx.clearRect(this.leftX, this.leftY, this.cw, this.ch)
-        this.leftX += 10
-        this.ctx.drawImage(this.image, this.rightX, this.rightY, this.cw, this.ch, this.leftX, this.leftY, this.cw, this.ch)
-
-      },
-
       init() {
-        this.ctx_img = this.$refs['yan_img'].getContent('2d')
-        this.ctx_img = this.$refs['yan_ceng'].getContent('2d')
+        this.ctx_img = this.$refs['yan_img'].getContext('2d')
+        this.ctx_img = this.$refs['yan_ceng'].getContext('2d')
 
         this.canvas_container_cls = true
 
@@ -72,15 +65,17 @@
         this.moverWidth = 0
         this.ctx_img.clearRect(0,0,this.qX,this.qY)
 
+        this.img = new Image()
+
         let that = this
-        this.image.onload = function () {
+        this.img.onload = function () {
           that.doDraw()
         }
 
         //右边方块随机位置
         this.cX = 300
         this.cY = 110
-        this.image.src = 'http://www.hubei.gov.cn/zhuanti/2016zt/2016trwr/2016trwrwh/201601/W020160126606049779228.jpg'
+        this.img.src = 'http://www.hubei.gov.cn/zhuanti/2016zt/2016trwr/2016trwrwh/201601/W020160126606049779228.jpg'
       },
 
       doDraw(){
