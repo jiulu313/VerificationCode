@@ -1,6 +1,9 @@
 <template>
   <div id="app">
-    <sliding-block></sliding-block>
+    <div class="root_container">
+      <sliding-block style="margin-left: 40px;"></sliding-block>
+
+    </div>
   </div>
 </template>
 
@@ -25,5 +28,11 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+}
+
+.root_container {
+  width: 600px;
+  height: 600px;
+  background-color: cadetblue;
 }
 </style>

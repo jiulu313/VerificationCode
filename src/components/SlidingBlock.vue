@@ -8,14 +8,13 @@
     <div style="width: 100%;height: 1px;background-color: #e4e7eb;"></div>
 
     <div style="flex:1;width: 290px;margin: 15px;">
-      <div class="sb_canvas_container">
-        <canvas ref="sb_img" width="100%" height="100%"></canvas>
-        <canvas ref="sb_block" width="100%" height="100%"></canvas>
-      </div>
+
+      <canvas ref="canvasRef" width="290" height="175" style="margin: 0 auto;"></canvas>
+
     </div>
 
     <div class="sb_sliding_container">
-      <div ref="dragBtnMoved" class="sb_moved" v-bind:style="{width:dragMoveBtnWidth}"></div>
+      <div ref="dragBtnMoved" class="sb_moved"></div>
       <span ref="dragBtnRef" class="sb_slider_tips_text">向右拖动滑块填充拼图</span>
       <span class="sb_slide_block">-></span>
     </div>
@@ -30,83 +29,56 @@
 
     data() {
       return {
-        r: 10,
-        s: 40,
-        qX: 0,
-        qY: 0,
-        n: 0,
-        resultData: 0,
-        cX: 0,
-        cY: 0,
-        imageData: null,
-        isMatch: false,
-
-        mX: 0, //移动距离
-
-        //滑动距离
-        dX: 0,
-        dX1: 0,
-
-        isDrag: false,
-
-        dragMoveBtnWidth: 0,  //滑过的宽度
-        dragBtnLeft: 0,  //滑块的left值
-
-
         image: null,
-        imageRef: null,
-        blockRef: null,
-        ctxImage: null,
-        ctxBlock: null,
+        ctx: null,
+        ctx2: null,
+
+        //方块的宽高
+        cw: 40,
+        ch: 40,
+
+        rightX: 230,
+        rightY: 100,
+
+        leftX: 20,
+        leftY: 100,
+
+
+        canvasWidth: 290,
+        canvasHeight: 175,
+
+        canvasShow: false,
       }
     },
 
     methods: {
       onCloseClicked() {
-        alert('关闭')
+        this.ctx.clearRect( this.leftX, this.leftY, this.cw, this.ch)
+        this.leftX += 10
+        this.ctx.drawImage(this.image, this.rightX, this.rightY, this.cw, this.ch, this.leftX, this.leftY, this.cw, this.ch)
+
       },
 
       init() {
-        this.image = new Image()
-        this.imageRef = this.$refs['sb_img']
-        this.blockRef = this.$refs['sb_block']
+        this.canvasRef = this.$refs['canvasRef']
+        this.ctx = this.canvasRef.getContext('2d')
 
-        this.ctxImage = this.imageRef.getContext('2d')
-        this.ctxBlock = this.blockRef.getContext('2d')
-
-        //默认滑块位置
-        this.cX = 40
-        this.cY = 80
-
-        this.qX = this.imageRef.width
-        this.qY = this.imageRef.height
-        //清除
-        this.ctxBlock.clearRect(0, 0, this.qX, this.qY)
-        this.ctxImage.clearRect(0, 0, this.qX, this.qY)
 
         this.generateJigsaw()
       },
 
-      //生成拼图
       generateJigsaw() {
-        this.mX = 0
-        this.dragMoveBtnWidth = 0
-        this.dragBtnLeft = 0
-
-        this.ctxBlock.clearRect(0, 0, this.qX, this.qY)
-
-        this.image.src = 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1562834497&di=4b589089a972a3175b4282fd071ccf34&imgtype=jpg&er=1&src=http%3A%2F%2Fimg.pconline.com.cn%2Fimages%2Fphotoblog%2F4%2F5%2F9%2F3%2F4593370%2F200912%2F6%2F1260092648480_mthumb.jpg'
 
         let that = this
-        this.image.onload = () => {
-          that.beginDraw()
+        this.image = new Image()
+        this.image.onload = function () {
+          that.ctx.drawImage(that.image, 0, 0, that.canvasWidth, that.canvasHeight)
+          that.ctx.drawImage(that.image, that.rightX, that.rightY, that.cw, that.ch, that.leftX, that.leftY, that.cw, that.ch)
+
+          that.ctx.clearRect(that.rightX, that.rightY, that.cw, that.ch)
         }
+        this.image.src = 'http://pic31.nipic.com/20130711/8952533_164845225000_2.jpg'
 
-      },
-
-      beginDraw() {
-        //画整个背景
-        this.ctxBlock.drawImage(this.image, 0, 0, this.qX, this.qY)
 
         //右边方块
         // //右方拼图块
@@ -143,7 +115,7 @@
     flex-direction: column;
     width: 320px;
     height: 280px;
-    background-color: #fff;
+    background-color: gray;
   }
 
   .sb_tip_container {
@@ -216,5 +188,14 @@
     border-color: #e4e7eb;
   }
 
+  .canvas_cls_hidden {
+    margin: 0 auto;
+    display: none;
+  }
+
+  .canvas_cls_show {
+    margin: 0 auto;
+    display: block;
+  }
 
 </style>
