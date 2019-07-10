@@ -77,7 +77,7 @@
 
           that.ctx.clearRect(that.rightX, that.rightY, that.cw, that.ch)
         }
-        this.image.src = 'http://pic31.nipic.com/20130711/8952533_164845225000_2.jpg'
+        this.image.src = 'http://www.hubei.gov.cn/zhuanti/2016zt/2016trwr/2016trwrwh/201601/W020160126606049779228.jpg'
 
 
         //右边方块

@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <div class="root_container">
-      <sliding-block style="margin-left: 40px;"></sliding-block>
+      <sliding-block2 style="margin-left: 40px;"></sliding-block2>
 
     </div>
   </div>
@@ -10,12 +10,14 @@
 <script>
 import HelloWorld from './components/HelloWorld'
 import SlidingBlock from './components/SlidingBlock'
+import SlidingBlock2 from './components/SlidingBlock2'
 
 export default {
   name: 'App',
   components: {
     HelloWorld,
-    SlidingBlock
+    SlidingBlock,
+    SlidingBlock2
   }
 }
 </script>
