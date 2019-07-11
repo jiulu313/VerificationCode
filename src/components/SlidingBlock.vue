@@ -45,7 +45,7 @@
         //extra
         canvas_container_cls: false,
 
-        btnLeft: 0,
+        btnLeft: '122px',
         moverWidth: 0,
         btnText: '|||',
         movedText : '',
@@ -163,8 +163,10 @@
             this.isDrag = false;
             this.mX = 0;
           }
-          this.btnLeft = this.mX
-          this.moverWidth = this.mX
+
+
+          this.btnLeft = this.mX + 'px'
+          this.moverWidth = this.mX + 'px'
 
 
           this.ctx_ceng.clearRect(0, 0, this.qX, this.qY);
