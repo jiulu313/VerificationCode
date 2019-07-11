@@ -6,11 +6,12 @@
       <canvas ref="yan_ceng" id="yan_ceng" width="400" height="250"></canvas>
     </div>
 
-    <div class="yan_drag">
-      <div ref="mover" class="moved" v-bind:style="{width:this.moverWidth}"></div>
-      <button ref="btn" class="yan_drag_btn" v-on:mousedown="onBtnMouseDown" v-bind:style="{left:this.btnLeft}">|||
+    <div v-on:mousemove="onMoverMove" class="yan_drag">
+      <div ref="mover" class="moved" v-bind:style="{width:this.moverWidth}">{{movedText}}</div>
+      <button ref="btn" class="yan_drag_btn" v-on:mousedown.stop="onBtnMouseDown" v-bind:style="{left:this.btnLeft}">
+        {{btnText}}
       </button>
-      <div class="yan_drag_text">拖动滑块进行验证</div>
+      <div class="yan_drag_text">{{dragText}}</div>
     </div>
   </div>
 </template>
@@ -46,6 +47,9 @@
 
         btnLeft: 0,
         moverWidth: 0,
+        btnText: '|||',
+        movedText : '',
+        dragText : '拖动滑块进行验证'
 
       }
     },
@@ -56,6 +60,11 @@
         this.ctx_ceng = this.$refs['yan_ceng'].getContext('2d')
 
         this.canvas_container_cls = true
+
+        let that = this
+        document.onmouseup = function (e) {
+          that.onDocumentMouseUp(e)
+        }
 
         this.generateJigsaw()
       },
@@ -134,6 +143,17 @@
       },
 
       onBtnMouseDown(e) {
+        if (this.isMatch) {
+          return;
+        }
+        this.dX = e.pageX;
+        this.dX1 = e.pageX + this.qX - this.s;
+
+        this.btnText = '<->'
+        this.isDrag = true;
+      },
+
+      onMoverMove(e) {
         if (this.isDrag) {
           let x = e.pageX;
           if (x >= this.dX && x <= this.dX1) {
@@ -166,7 +186,26 @@
 
           this.ctx_ceng.restore();
         }
+      },
+
+      onDocumentMouseUp(e) {
+        this.isDrag = false;
+        this.btnText = '|||'
+
+        if (this.mX + 1 <= this.cX + 3 && this.mX + 1 >= this.cX - 3) {
+          let flag = true
+          if (flag) {
+            this.isMatch = true;
+            this.movedText = '验证通过'
+            this.dragText = ''
+          } else {
+            this.generateJigsaw()
+          }
+        } else {
+          this.generateJigsaw()
+        }
       }
+
 
     },
 
