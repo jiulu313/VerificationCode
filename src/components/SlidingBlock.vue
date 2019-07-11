@@ -8,7 +8,8 @@
 
     <div class="yan_drag">
       <div ref="mover" class="moved" v-bind:style="{width:this.moverWidth}"></div>
-      <button ref="btn" class="yan_drag_btn" v-bind:style="{left:this.btnLeft}">|||</button>
+      <button ref="btn" class="yan_drag_btn" v-on:mousedown="onBtnMouseDown" v-bind:style="{left:this.btnLeft}">|||
+      </button>
       <div class="yan_drag_text">拖动滑块进行验证</div>
     </div>
   </div>
@@ -20,31 +21,31 @@
 
     data() {
       return {
-        r : 10,
-        s : 50,
-        qX : 400,
-        qY : 250,
-        resultData : null,
-        cX : 0,
-        cY : 0,
-        imgData : null,
-        isMatch : false,
-        img : null,
+        r: 10,
+        s: 50,
+        qX: 400,
+        qY: 250,
+        resultData: null,
+        cX: 0,
+        cY: 0,
+        imgData: null,
+        isMatch: false,
+        img: null,
 
-        ctx_img : null,
-        ctx_ceng : null,
+        ctx_img: null,
+        ctx_ceng: null,
 
-        mX : 0,
-        dX : 0,
-        dX1 : 0,
-        isDrag : false,
+        mX: 0,
+        dX: 0,
+        dX1: 0,
+        isDrag: false,
 
 
         //extra
-        canvas_container_cls : false,
+        canvas_container_cls: false,
 
-        btnLeft:0,
-        moverWidth : 0,
+        btnLeft: 0,
+        moverWidth: 0,
 
       }
     },
@@ -52,18 +53,18 @@
     methods: {
       init() {
         this.ctx_img = this.$refs['yan_img'].getContext('2d')
-        this.ctx_img = this.$refs['yan_ceng'].getContext('2d')
+        this.ctx_ceng = this.$refs['yan_ceng'].getContext('2d')
 
         this.canvas_container_cls = true
 
         this.generateJigsaw()
       },
 
-      generateJigsaw(){
+      generateJigsaw() {
         this.mX = 0;
         this.btnLeft = 0
         this.moverWidth = 0
-        this.ctx_img.clearRect(0,0,this.qX,this.qY)
+        this.ctx_img.clearRect(0, 0, this.qX, this.qY)
 
         this.img = new Image()
 
@@ -75,10 +76,12 @@
         //右边方块随机位置
         this.cX = 300
         this.cY = 110
-        this.img.src = 'http://www.hubei.gov.cn/zhuanti/2016zt/2016trwr/2016trwrwh/201601/W020160126606049779228.jpg'
+        this.img.src = '/static/bc02.jpg'
+        this.img.crossOrigin = '';
+
       },
 
-      doDraw(){
+      doDraw() {
         this.ctx_img.drawImage(this.img, 0, 0, this.qX, this.qY);
         //右方拼图块
         this.ctx_img.save();
@@ -128,6 +131,41 @@
         ctx.lineTo(mX + this.s / 2 + this.r, this.cY + this.s);
         ctx.arc(mX + this.s / 2, this.cY + this.s, this.r, 2 * Math.PI, Math.PI, true);
         ctx.lineTo(mX, this.cY + this.s);
+      },
+
+      onBtnMouseDown(e) {
+        if (this.isDrag) {
+          let x = e.pageX;
+          if (x >= this.dX && x <= this.dX1) {
+            this.mX = e.pageX - this.dX;
+          }
+          if (x >= this.dX1) {
+            this.isDrag = false;
+            this.mX = 0;
+          }
+          this.btnLeft = this.mX
+          this.moverWidth = this.mX
+
+
+          this.ctx_ceng.clearRect(0, 0, this.qX, this.qY);
+          this.ctx_ceng.lineWidth = 2;
+          this.ctx_ceng.strokeStyle = '#ffffff';
+
+          this.ctx_ceng.putImageData(this.imgData, this.mX, this.cY - this.r);
+          this.ctx_ceng.globalCompositeOperation = "destination-in";
+
+          this.ctx_ceng.save();
+          this.ctx_ceng.beginPath();
+          this.ctx_ceng.moveTo(this.mX, this.cY);
+          this.ctx_ceng.lineTo(this.mX + this.s / 2 - this.r, this.cY);
+          this.strockArc(this.ctx_ceng, this.mX);
+          this.ctx_ceng.closePath();
+          this.ctx_ceng.fillStyle = 'green';
+          this.ctx_ceng.fill();
+          this.ctx_ceng.clip();
+
+          this.ctx_ceng.restore();
+        }
       }
 
     },
